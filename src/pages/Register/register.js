@@ -53,7 +53,7 @@ export default function Register() {
             backgroundColor: '#0b114c',
         },
         message: {
-            marginTop: '14%',
+            marginTop: '20%',
             marginBottom: '8%',
             paddingStart: '5%',
             color: '#fff',

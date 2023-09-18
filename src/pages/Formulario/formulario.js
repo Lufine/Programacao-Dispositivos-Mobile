@@ -102,6 +102,7 @@ const App = () => {
                   <TextInput
                     style={styles.input}
                     placeholder="Nome da Equipe"
+                    placeholderTextColor={'#ccc'}
                     onChangeText={(text) => setEquipe(text)}
                     value={equipe}
                   />
@@ -109,6 +110,7 @@ const App = () => {
                   <TextInput
                     style={styles.input}
                     placeholder="Nomes dos Integrantes (separados por vírgula)"
+                    placeholderTextColor={'#ccc'}
                     onChangeText={(text) => setIntegrantes(text)}
                     value={integrantes}
                   />
@@ -140,7 +142,7 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
         marginStart: -170,
-        marginTop: 30,
+        marginTop: 80,
         marginBottom: 10,
     },
     title: {
@@ -148,7 +150,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#00affa',
         marginBottom: 20,
-        marginTop: -45,
+        marginTop: -40,
+        marginStart: 20,
         position: 'relative'
     },
     subtitle: {
