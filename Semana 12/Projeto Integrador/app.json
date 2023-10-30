@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "E-Sports",
+    "slug": "E-Sports",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "infoPlist": {
+        "NSCameraUsageDescription": "Precisamos de acesso à câmera para tirar fotos.",
+        "NSPhotoLibraryUsageDescription": "Precisamos de acesso à galeria de fotos para salvar imagens."
+      },
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "permissions": ["CAMERA", "CAMERA_ROLL"],
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
