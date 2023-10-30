@@ -1,3 +1,8 @@
+/*
+Aluno: Luiz Filipe Neuwirth
+Matrícula: 2111287
+*/
+
 import React, { Component } from 'react';
 import { Text, View, TextInput, Button, TouchableWithoutFeedback, Keyboard, StyleSheet } from 'react-native';
 
