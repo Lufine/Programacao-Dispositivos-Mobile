@@ -125,9 +125,10 @@ const styles = StyleSheet.create({
   },
   captureButton: {
     backgroundColor: '#007bff',
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 5,
+    marginBottom: 20,
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    borderRadius: 25,
   },
   captureButtonText: {
     textAlign: 'center',
