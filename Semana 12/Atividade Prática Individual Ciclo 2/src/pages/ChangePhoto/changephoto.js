@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Camera } from 'expo-camera';
@@ -6,6 +6,7 @@ import * as MediaLibrary from 'expo-media-library';
 
 const CameraScreen = () => {
   const navigation = useNavigation();
+  const cameraRef = useRef();
 
   const [capturedImage, setCapturedImage] = useState(null);
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
@@ -27,21 +28,27 @@ const CameraScreen = () => {
       return;
     }
 
-    if (this.camera) {
-      let photo = await this.camera.takePictureAsync();
-      MediaLibrary.createAssetAsync(photo.uri)
-        .then(() => {
-          // Mostre uma mensagem de sucesso na interface
-          alert('Imagem salva com sucesso! Redirecionando para o perfil em 3 segundos.');
+    if (cameraRef.current) {
+      try {
+        const options = { quality: 0.5, base64: true };
+        const data = await cameraRef.current.takePictureAsync(options);
 
-          // Agende a navegação para a tela 'Profile' após 3 segundos
-          setTimeout(() => {
-            navigation.navigate('Profile');
-          }, 3000); // 3000 milissegundos (3 segundos)
-        })
-        .catch((error) => {
-          alert('Erro ao salvar a imagem: ' + error);
-        });
+        setCapturedImage(data.uri);
+
+        MediaLibrary.createAssetAsync(data.uri)
+          .then(() => {
+            alert('Imagem salva com sucesso! Redirecionando para o perfil em 2 segundos.');
+
+            setTimeout(() => {
+              navigation.navigate('Profile');
+            }, 2000);
+          })
+          .catch((error) => {
+            alert('Erro ao salvar a imagem: ' + error);
+          });
+      } catch (error) {
+        alert('Erro ao tirar a foto: ' + error);
+      }
     }
   };
 
@@ -55,25 +62,22 @@ const CameraScreen = () => {
     <View style={styles.container}>
       {capturedImage ? (
         <View style={styles.imageContainer}>
-          <Image source={require("../../assets/perfil.png")} style={styles.img} />
           <Image source={{ uri: capturedImage }} style={styles.capturedImage} />
-          <TouchableOpacity style={styles.button} onPress={saveImage}>
-            <Text style={styles.buttonText}>Salvar</Text>
-          </TouchableOpacity>
         </View>
       ) : (
-        <View style={styles.imageContainer}>
-          <Image source={require("../../assets/perfil.png")} style={styles.img} />
+        <View style={styles.cameraContainer}>
           <Camera
             style={styles.camera}
-            type={Camera.Constants.Type.back}
-            ref={(ref) => {
-              this.camera = ref;
-            }}
-          />
-          <TouchableOpacity style={styles.captureButton} onPress={takePicture}>
-            <Text style={styles.captureButtonText}>Capturar Imagem</Text>
-          </TouchableOpacity>
+            ref={cameraRef}
+            type={Camera.Constants.Type.front}
+            ratio={'4:3'} // Defina a proporção desejada
+          >
+            <View style={styles.captureButtonContainer}>
+              <TouchableOpacity style={styles.captureButton} onPress={takePicture}>
+                <Text style={styles.captureButtonText}>Capturar Imagem</Text>
+              </TouchableOpacity>
+            </View>
+          </Camera>
         </View>
       )}
     </View>
@@ -85,31 +89,41 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: '#000',
-    justifyContent: 'center',
   },
   imageContainer: {
     flex: 1,
     alignItems: 'center',
-    marginTop: 30,
+    justifyContent: 'center',
   },
-  img: {
-    width: 400,
-    height: 650,
-    marginBottom: 20,
+  cameraContainer: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: 'black',
   },
   button: {
     backgroundColor: '#007bff',
     paddingVertical: 12,
     paddingHorizontal: 30,
     borderRadius: 15,
+    margin: 20,
   },
   buttonText: {
     textAlign: 'center',
     color: '#fff',
     fontWeight: 'bold',
   },
+  camera: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
+  captureButtonContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
   captureButton: {
-    marginTop: 20,
     backgroundColor: '#007bff',
     paddingVertical: 12,
     paddingHorizontal: 30,
@@ -122,9 +136,7 @@ const styles = StyleSheet.create({
   },
   capturedImage: {
     flex: 1,
-    resizeMode: 'contain',
     width: '100%',
-    height: '100%',
   },
 });
 
